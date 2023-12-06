@@ -1,3 +1,3 @@
 # locate_me
 
-[![Watch the Video](videos/vid.mp4)](videos/vid.mp4)
+[![Watch the Video](video/vid.mp4)](video/vid.mp4)
