@@ -1,0 +1,2 @@
+https://jsonkeeper.com/b/M8DQ ------ user current locations
+https://www.jsonkeeper.com/b/2ZWX ------- past locations
