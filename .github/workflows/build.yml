@@ -3,7 +3,7 @@ name: Build Flutter APK
 on:
   push:
     branches:
-      - main # Set the branch you want to trigger the workflow on
+      - main
 
 jobs:
   build:
@@ -16,7 +16,17 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '1.0.0' # Specify the Flutter version you want to use
+        flutter-version: '3.16.2' # Specify the Flutter version you want to use
+
+    - name: Cache Flutter packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.pub-cache
+          ~/flutter/.pub-cache
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-flutter-
 
     - name: Install dependencies
       run: flutter pub get
