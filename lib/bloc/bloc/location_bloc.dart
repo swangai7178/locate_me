@@ -18,7 +18,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     emit(LocationLoading());
 
     try {
-      print("imtrying");
+      
       var dataLocation =  await CustomerService.fetchLocation();
 
       location = dataLocation;
