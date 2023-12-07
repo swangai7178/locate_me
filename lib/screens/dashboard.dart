@@ -3,7 +3,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:locate_me/bloc/bloc/location_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:locate_me/models/currentlocationsmodel.dart';
 import 'package:locate_me/screens/viewuser.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 class MyDashBoard extends StatefulWidget {
@@ -16,7 +15,6 @@ class MyDashBoard extends StatefulWidget {
 class _MyDashBoardState extends State<MyDashBoard> {
   LatLng customerLocation = const LatLng(1.291, 36.8189);
   LocationBloc locationBloc = LocationBloc();
-  List<CurrentLocation> location = [];
 late GoogleMapController mapController;
   @override
   void initState(){
@@ -32,8 +30,8 @@ late GoogleMapController mapController;
 
     return Scaffold(
       body: BlocConsumer<LocationBloc, LocationState>(
-        listener: (context, state) async{
-          
+        listener: (context, state) {
+          // TODO: implement listener
         },
         bloc: locationBloc,
                       listenWhen: (previous, current) =>
@@ -46,11 +44,25 @@ late GoogleMapController mapController;
           switch (state.runtimeType) {
                           case const (SuccessState):
                             final locationsuccess = state as SuccessState;
-                           
-                               location =locationsuccess.location;
-                              addMarkers();
-                         
-          
+                          
+
+// Assuming you have a class definition for LocationEntry and CurrentLocation
+
+Set<Marker> markers ={
+  for (int i = 0; i < locationsuccess.location.length; i++)
+  
+    Marker(
+      markerId: MarkerId('courier$i'),
+      position: LatLng(
+        double.parse(locationsuccess.location[i].latitude.toString()),
+        double.parse(locationsuccess.location[i].longitude.toString()),
+      ),
+      infoWindow: InfoWindow(title: locationsuccess.location[i].user),
+      icon: BitmapDescriptor.defaultMarker
+       // Replace with your image asset path
+    ),
+};
+
       return Stack(
   children: [
     GoogleMap(
@@ -83,7 +95,7 @@ late GoogleMapController mapController;
                 ),
                 const SizedBox(height: 8.0),
                 FloatingActionButton(
-                  heroTag: "send",
+                  heroTag: "sendme",
                   onPressed: () {
                     mapController.animateCamera(CameraUpdate.zoomOut());
                   },
@@ -219,7 +231,7 @@ late GoogleMapController mapController;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ViewUser(),
+                      builder: (context) => ViewUser(),
                       settings: RouteSettings(
                         arguments: locationsuccess.location[index],
                       ),
@@ -309,33 +321,5 @@ Container _buildCategoryContainer(String text) {
     ),
   );
 }
-Set<Marker> markers = {};
-
-  Future<void> addMarkers() async {
-    for (int i = 0; i < location.length; i++) {
-      BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(size: Size(10, 10)), // Set the desired size
-        'images/person.jpg', // Replace with your image asset path
-      );
-    
-      markers.add(
-        Marker(
-          markerId: MarkerId('courier$i'),
-          position: LatLng(
-            double.parse(location[i].latitude.toString()),
-            double.parse(location[i].longitude.toString()),
-          ),
-          infoWindow: InfoWindow(title: location[i].user),
-          icon: icon,
-        ),
-      );
-    
-    
-    }
-  }
-
-// Call the function to add markers
-
-
 
 }
