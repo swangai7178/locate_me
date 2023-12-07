@@ -4,6 +4,7 @@ import 'package:locate_me/bloc/bloc/location_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:locate_me/screens/viewuser.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 class MyDashBoard extends StatefulWidget {
   const MyDashBoard({super.key});
 
@@ -49,6 +50,7 @@ late GoogleMapController mapController;
 
 Set<Marker> markers ={
   for (int i = 0; i < locationsuccess.location.length; i++)
+  
     Marker(
       markerId: MarkerId('courier$i'),
       position: LatLng(
@@ -56,6 +58,7 @@ Set<Marker> markers ={
         double.parse(locationsuccess.location[i].longitude.toString()),
       ),
       infoWindow: InfoWindow(title: locationsuccess.location[i].user),
+      icon: BitmapDescriptor.defaultMarker
        // Replace with your image asset path
     ),
 };
